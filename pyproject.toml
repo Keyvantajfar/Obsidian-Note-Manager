@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vaultmgr"
+version = "0.1.0"
+description = "AI-assisted Obsidian vault tagger & organizer: UI-independent core + Textual TUI"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["httpx>=0.27"]
+
+[project.optional-dependencies]
+tui = ["textual>=0.80"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "textual>=0.80"]
+
+[project.scripts]
+vaultmgr = "vaulttui.app:main"
+vaultmgr-cli = "vaultcore.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
