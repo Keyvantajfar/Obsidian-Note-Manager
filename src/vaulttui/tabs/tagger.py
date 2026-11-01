@@ -122,6 +122,7 @@ class TaggerTab(TabBase):
 
     def refresh_view(self) -> None:
         s = self.session
+        self.query_one("#tg-route", Checkbox).display = s.route_enabled     # hidden in the HEADER workspace
         t = self.query_one("#tg-table", DataTable)
         keep = self.cur
         rels = self._rels()

@@ -83,3 +83,15 @@ ModalScreen { align: center middle; }
 /* multi-column rows inside forms must size to their content, otherwise they collapse to zero height */
 .form .row { height: auto; }
 .form .row > Vertical { height: auto; width: 1fr; padding-right: 1; }
+
+/* ---------- home ---------- */
+#homeview { height: 1fr; align: center middle; }
+#banner { width: 100%; content-align: center middle; text-align: center; color: $primary; text-style: bold; height: 8; padding-top: 1; }
+#tagline { width: 100%; text-align: center; color: $text-muted; height: 2; }
+#tiles { grid-size: 2 2; grid-gutter: 1 2; width: 84; height: 22; }
+.tile { border: heavy $primary 60%; background: $panel; content-align: center middle; text-align: center; height: 100%; padding: 0 2; }
+.tile:hover { background: $boost; border: heavy $accent; }
+.tile:focus { border: heavy $accent; background: $boost; }
+#home-info { width: 100%; text-align: center; height: 2; margin-top: 1; color: $text-muted; }
+#home-foot { width: 100%; text-align: center; height: 1; color: $text-muted; }
+#workspace { height: 1fr; }

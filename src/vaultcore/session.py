@@ -62,6 +62,10 @@ class Session:
         self._listeners: list[Callable[[str, dict], None]] = []
         self._bg: list[asyncio.Task] = []
         self.paused_watch = False
+        # workflow switches (the TUI's home screen sets these): offline = never call a model; the others narrow what the AI may do
+        self.offline = False
+        self.header_enabled = True
+        self.route_enabled = True
         self.last_message = ""
         self.analyzer = Analyzer(settings=self.settings, index=self.index, taxonomy=self.taxonomy,
                                  instructions=self.instructions, cache=self.cache,
@@ -171,7 +175,7 @@ class Session:
         if touched and self.rules.rules:
             self.apply_rules(touched)
         self.emit("scan", diff=d)
-        if touched and self.settings.auto_level != "manual":
+        if touched and self.settings.auto_level != "manual" and not self.offline:
             todo = [r for r in touched if (n := self.index.get(r)) and (n.missing or r in d.added)]
             if todo:
                 try:
@@ -249,6 +253,24 @@ class Session:
             elif sp.source == "static" and sp.default:
                 out[k] = [sp.default] if sp.is_list else sp.default
         return out
+
+    # ------------------------------------------------------------------ date fixer (offline)
+    def date_rows(self, *, key: str | None = None, source: str | None = None, tolerance_days: float = 1.0,
+                  flag_earlier: bool = False):
+        from . import dates
+        return dates.analyze(self, key=key, source=source, tolerance_days=tolerance_days, flag_earlier=flag_earlier)
+
+    def fix_dates(self, rows) -> int:
+        """Stage (accepted, manual priority) the proposed date of each row. Nothing is written until Apply."""
+        n = 0
+        for r in rows:
+            if r.status == "ok" or not r.proposed:
+                continue
+            why = {"missing": "no date in header", "unreadable": "header date unreadable", "format": "re-formatted, same date",
+                   "later": "header date is later than the file's date (copy time?)", "earlier": "header date is earlier than the file's date"}[r.status]
+            if self.stage_header(r.rel, {r.key: r.proposed}, overwrite=[r.key], source="manual", reason=f"date fixer: {why}"):
+                n += 1
+        return n
 
     # ------------------------------------------------------------------ staging API
     def _default_status(self, source: str, confidence: float | None) -> str:
@@ -645,6 +667,10 @@ class Session:
                only_unstaged: bool = False, fresh: bool = False, title: str = "") -> Job | None:
         """Start a background job that proposes headers and/or folders. Returns the Job (or None if
         there is nothing to do)."""
+        header, route = header and self.header_enabled, route and self.route_enabled
+        if self.offline or not (header or route):
+            self.say("AI is switched off in this workspace" if self.offline else "nothing to do")
+            return None
         items = self.plan_work(rels, header=header, route=route, only_unstaged=only_unstaged)
         queued = {it.rel for it in items}
         if header:   # notes that only miss date/static fields need no model call

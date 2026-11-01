@@ -268,7 +268,7 @@ class ExplorerTab(TabBase):
                 over = [k for k in res if any(h.lower() == k.lower() and have[h] for h in have)]
                 if s.stage_header(rel, res, overwrite=over, source="manual"):
                     n += 1
-            self.toast(f"staged header edit on {n} note(s) — apply from the Stage tab (4)")
+            self.toast(f"staged header edit on {n} note(s) — apply from the Stage tab")
         self.app.push_screen(FieldsModal(title, s.settings.header_schema, vals), done)
 
     def action_move(self) -> None:
@@ -285,7 +285,7 @@ class ExplorerTab(TabBase):
                 s.add_folder(folder, reroute=False)
             for rel in tg:
                 s.stage_move(rel, folder, source="manual")
-            self.toast(f"staged move of {len(tg)} note(s) → {folder or '(root)'}/ — apply from Stage (4)")
+            self.toast(f"staged move of {len(tg)} note(s) → {folder or '(root)'}/ — apply from the Stage tab")
         self.app.push_screen(FolderModal(self._folder_choices(), default, f"Move {len(tg)} note(s) to…",
                                          descriptions={p: f.description for p, f in s.taxonomy.folders.items()}), done)
 
@@ -317,7 +317,7 @@ class ExplorerTab(TabBase):
         def done(new):
             if new and new.strip() and new.strip() != note.title:
                 s.stage_move(rel, s.effective_folder(rel), name=new.strip(), source="manual")
-                self.toast("staged rename — apply from Stage (4). [[links]] by name will need updating if Obsidian doesn't do it.")
+                self.toast("staged rename — apply from the Stage tab. [[links]] by name will need updating if Obsidian doesn't do it.")
         self.app.push_screen(PromptModal("Rename note", "New file name (without .md)", cur_name), done)
 
     def action_tag(self) -> None:

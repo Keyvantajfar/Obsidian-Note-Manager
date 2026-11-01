@@ -38,6 +38,8 @@ class TabBase(Vertical):
         if not self.MAIN_FOCUS:
             return
         try:      # focusing a widget inside a hidden tab would flip the tab back — only act for the visible one
+            if getattr(self.app, "home_visible", lambda: False)():
+                return                      # the home screen is showing: leave focus on its tiles
             if self.app.query_one("#tabs").active != self.TAB_ID:
                 return
             self.query_one(self.MAIN_FOCUS).focus()

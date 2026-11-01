@@ -20,7 +20,7 @@ FIELD_KINDS = ["text", "wikilink", "hashtag", "wikilink_list", "list", "csv", "d
 FIELD_SOURCES = ["llm", "created", "modified", "static", "none"]
 AUTO_LEVELS = ["manual", "assist", "auto"]
 COLLISION_POLICIES = ["suffix", "skip"]
-DATE_SOURCES = ["birth_or_mtime", "mtime", "earliest"]
+DATE_SOURCES = ["earliest", "mtime", "birth_or_mtime", "name_or_earliest"]
 
 
 # --------------------------------------------------------------------------- header schema
@@ -229,7 +229,6 @@ class Settings:
     # scanning
     ignore_globs: list[str] = field(default_factory=list)   # hidden completely (dot-folders always ignored)
     no_ai_globs: list[str] = field(default_factory=list)    # visible, but the AI never proposes for them
-    #date_source: str = "birth_or_mtime"
     date_source: str = "earliest"
     # header
     header_schema: list[FieldSpec] = field(default_factory=default_schema)
@@ -262,7 +261,6 @@ class Settings:
         if self.collision_policy not in COLLISION_POLICIES:
             self.collision_policy = "suffix"
         if self.date_source not in DATE_SOURCES:
-            #self.date_source = "birth_or_mtime"
             self.date_source = "earliest"
         self.auto_apply_cap = max(1, int(self.auto_apply_cap))
         self.watch_interval = max(2.0, float(self.watch_interval))

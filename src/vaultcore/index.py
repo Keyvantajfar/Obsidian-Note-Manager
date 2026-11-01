@@ -56,6 +56,12 @@ def file_created(path: str, mode: str = "birth_or_mtime") -> datetime:
     birth = getattr(st, "st_birthtime", None)
     if birth is None and os.name == "nt":
         birth = st.st_ctime
+    if mode == "name_or_earliest":
+        from .datefmt import date_in_name
+        named = date_in_name(os.path.basename(path))
+        if named is not None:
+            return named
+        mode = "earliest"
     if mode == "mtime":
         ts = st.st_mtime
     elif mode == "earliest":

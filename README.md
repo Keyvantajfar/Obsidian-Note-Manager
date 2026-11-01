@@ -19,6 +19,19 @@ vaultmgr-cli /path/to/vault auto --route     # headless: tag, route, accept conf
 
 A GUI (or web UI) can be added as a third package that talks to `Session` the same way. `vaultmgr-cli` is a tiny example of that.
 
+## Workspaces (home screen)
+
+`vaultmgr` opens a home screen with four tiles; each opens the same window showing only the tabs it needs (`Esc` returns home, `--workflow all|header|organizer|dates` skips the home screen):
+
+| Workspace | Tabs | Model used? |
+|---|---|---|
+| **ALL** | Explorer, Tagger, Organizer, Dates, Stage, Jobs, Tags, Rules, Settings | yes |
+| **HEADER** | Explorer, Tagger, Dates, Stage, Jobs, Tags, Rules, Settings (no folder moves) | yes |
+| **ORGANIZER** | Explorer, Organizer, Stage, Jobs, Rules, Settings (headers untouched) | yes |
+| **DATE FIXER** | Explorer, Dates, Stage, Settings | **never** — offline, no API calls |
+
+**Date fixer.** Compares each note's header date with the file timestamps and stages fixes: *missing*, *unreadable*, *format* (same date, written in the configured format), *later than file* (typical copy-time stamp) and optionally *earlier than file*. The date can come from `earliest` (default), `mtime`, `birth_or_mtime` or `name_or_earliest` (a date written in the file name, e.g. `Journal 2024-01-02`). You can fix the cursor/selection, everything shown, or type a date by hand. Fixes land in Stage like everything else (apply, undo). Headless: `vaultmgr-cli VAULT dates [--fix]`.
+
 ## Tabs
 
 1. **Explorer** – browse the vault (current or planned layout), edit headers by hand, move/rename, lock, AI-tag a selection, optionally edit the body.

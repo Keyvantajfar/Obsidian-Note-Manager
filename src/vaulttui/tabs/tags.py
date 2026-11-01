@@ -128,7 +128,7 @@ class TagsTab(TabBase):
     def _stage(self, olds: list[str], new: str | None) -> None:
         n = self.session.rename_value(self.key, olds, new)
         self.sel.clear()
-        self.toast(f"staged {n} header edit(s) — review & apply in Stage (4)" if n else "no note needed a change")
+        self.toast(f"staged {n} header edit(s) — review & apply in the Stage tab" if n else "no note needed a change")
         self.maybe_refresh(force=True)
 
     def action_rename(self) -> None:
