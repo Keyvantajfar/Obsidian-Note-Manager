@@ -7,14 +7,32 @@ from textual.containers import Center, Grid, Vertical
 from textual.message import Message
 from textual.widgets import Static
 
+
+#BANNER = r"""
+#██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
+#██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
+#██║   ██║███████║██║   ██║██║     ██║
+#╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║
+# ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║
+#  ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝
+#"""
+
 BANNER = r"""
-██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
-██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
-██║   ██║███████║██║   ██║██║     ██║
-╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║
- ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║
-  ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝
+ ██████╗ ██████╗ ███████╗██╗██████╗ ██╗ █████╗ ███╗   ██╗
+██╔═══██╗██╔══██╗██╔════╝██║██╔══██╗██║██╔══██╗████╗  ██║
+██║   ██║██████╔╝███████╗██║██║  ██║██║███████║██╔██╗ ██║
+██║   ██║██╔══██╗╚════██║██║██║  ██║██║██╔══██║██║╚██╗██║
+╚██████╔╝██████╔╝███████║██║██████╔╝██║██║  ██║██║ ╚████║
+ ╚═════╝ ╚═════╝ ╚══════╝╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
+__   ___  _   _ _  _____   __  __   _   _  _   _   ___ ___ ___
+\ \ / /_\| | | | ||_   _| |  \/  | /_\ | \| | /_\ / __| __| _ \
+ \ V / _ \ |_| | |__| |   | |\/| |/ _ \| .` |/ _ \ (_ | _||   /
+  \_/_/ \_\___/|____|_|   |_|  |_/_/ \_\_|\_/_/ \_\___|___|_|_\
 """
+
+_w = max(len(l) for l in BANNER.splitlines())
+BANNER = "\n".join(l.ljust(_w) for l in BANNER.strip("\n").splitlines())     # equal widths so centring never shears the art
 
 # id -> (title, ascii art, description, tabs in order, needs an LLM?)
 WORKFLOWS: dict[str, tuple[str, str, str, list[str], bool]] = {
@@ -60,13 +78,16 @@ class HomeView(Vertical):
 
     def compose(self) -> ComposeResult:
         yield Static(BANNER, id="banner")
-        yield Static("M A N A G E R   ·   tag · organize · fix dates in your Obsidian vault", id="tagline")
+        yield Static("tag · organize · fix dates in your notes", id="tagline")
         with Center():
             with Grid(id="tiles"):
                 for i, wid in enumerate(ORDER, 1):
                     yield Tile(wid, str(i))
         yield Static("", id="home-info")
         yield Static("[b]\\[1-4][/b] open   [b]\\[Q][/b] quit   ·   [b]\\[Esc][/b] comes back here from any workspace", id="home-foot")
+
+    def on_mount(self) -> None:
+        self.query_one("#banner").styles.height = "auto"       # the logo is taller than the old default
 
     def focus_tile(self, wid: str = "all") -> None:
         try:
