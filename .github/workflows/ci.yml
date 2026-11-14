@@ -1,0 +1,41 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}" }
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+  build-binary:
+    # build + smoke-test the packaged app on every OS (the release workflow does the same and publishes)
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev]"
+      - run: python packaging/build_binary.py
+      - name: Smoke test the built app
+        shell: bash
+        run: |
+          case "$RUNNER_OS" in
+            macOS) mkdir smoke && ditto -x -k dist/vaultmgr-macos-*.app.zip smoke && exe=smoke/VaultMgr.app/Contents/MacOS/VaultMgr ;;
+            Windows) exe=$(ls dist/vaultmgr-windows-*.exe) ;;
+            *) exe=$(ls dist/vaultmgr-linux-*); chmod +x "$exe" ;;
+          esac
+          python packaging/smoke_test.py "$exe"

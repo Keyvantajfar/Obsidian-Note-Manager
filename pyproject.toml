@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vaultmgr"
+dynamic = ["version"]
+description = "AI-assisted Obsidian vault tagger & organizer: UI-independent core, desktop/web app and Textual TUI"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["httpx>=0.27", "fastapi>=0.115", "uvicorn>=0.30"]
+
+[project.optional-dependencies]
+tui = ["textual>=0.80"]
+native = ["pywebview>=5.0"]   # optional: a true native window instead of a Chromium app window
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "textual>=0.80", "pyinstaller>=6.0", "build>=1.0", "pillow>=10"]
+
+[project.scripts]
+vaultmgr = "vaultweb.cli:main"
+vaultmgr-tui = "vaulttui.app:main"
+vaultmgr-cli = "vaultcore.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "vaultcore.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+vaultweb = ["static/*", "static/**/*"]
+vaulttui = ["*.tcss"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]

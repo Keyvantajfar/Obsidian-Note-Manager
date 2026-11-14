@@ -1,0 +1,79 @@
+name: Release
+# Push a tag such as v0.2.0 to publish: wheel + sdist and app binaries for Linux, Windows and macOS.
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag must match vaultcore.__version__
+        run: |
+          v=$(python -c "import re;print(re.search(r'__version__ = \"(.+?)\"',open('src/vaultcore/__init__.py').read()).group(1))")
+          [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "tag ${GITHUB_REF_NAME} != version v$v"; exit 1; }
+  test:
+    needs: check-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev]" && python -m pytest -q
+  python-package:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install build && python -m build
+      - uses: actions/upload-artifact@v4
+        with: { name: python-dist, path: dist/* }
+  binaries:
+    needs: test
+    strategy:
+      matrix:
+        include:
+          - { os: ubuntu-latest }
+          - { os: windows-latest }
+          - { os: macos-latest }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev]"
+      - run: python packaging/build_binary.py
+      - name: Smoke test (start the app from the built binary, open the demo vault, run a job, quit)
+        shell: bash
+        run: |
+          case "$RUNNER_OS" in
+            macOS) mkdir smoke && ditto -x -k dist/vaultmgr-macos-*.app.zip smoke && exe=smoke/VaultMgr.app/Contents/MacOS/VaultMgr ;;
+            Windows) exe=$(ls dist/vaultmgr-windows-*.exe) ;;
+            *) exe=$(ls dist/vaultmgr-linux-*); chmod +x "$exe" ;;
+          esac
+          python packaging/smoke_test.py "$exe"
+      - uses: actions/upload-artifact@v4
+        with: { name: "binary-${{ matrix.os }}", path: "dist/vaultmgr-*" }
+  release:
+    needs: [python-package, binaries]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - run: cd artifacts && sha256sum * > SHA256SUMS.txt
+      - name: Release notes from CHANGELOG.md
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '$0 ~ "^## \\[" v "\\]" {f=1; next} /^## \[/ {f=0} f' CHANGELOG.md > notes.md
+          [ -s notes.md ] || { echo "No CHANGELOG.md section for $v"; exit 1; }
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          body_path: notes.md
