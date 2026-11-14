@@ -1,4 +1,22 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vault Manager</title><!--VM-CONFIG--></head>
-<body><p>Vault Manager server is running. (UI is built in Part B.)</p></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vault Manager</title>
+<link rel="icon" href="/static/icon.png">
+<!--VM-CONFIG-->
+<script>try{var t=JSON.parse(localStorage.getItem('vm:theme'));if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/css/tokens.css">
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/layout.css">
+<link rel="stylesheet" href="/static/css/components.css">
+<script src="/static/desktop.js" defer></script>
+<script type="module" src="/static/js/app.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<div id="toasts" aria-live="polite"></div>
+<noscript>Vault Manager needs JavaScript, which is switched off in this window.</noscript>
+</body>
+</html>

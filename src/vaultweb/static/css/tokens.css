@@ -1,0 +1,42 @@
+/* Design tokens. Dark = "Obsidian" (ink blue-black, glass teal). Light = "Vellum" (cool paper). */
+:root {
+  --font-ui: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "SF Pro Text", Roboto, "Helvetica Neue", sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --fs-xs: 11.5px; --fs-sm: 12.5px; --fs-md: 13.5px; --fs-lg: 15px; --fs-xl: 19px; --fs-2xl: 28px; --fs-3xl: 40px;
+  --r-sm: 4px; --r-md: 7px; --r-lg: 12px;
+  --rail-w: 188px; --status-h: 46px; --cmd-h: 40px; --row-h: 34px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+
+  color-scheme: dark;
+  --bg: #0f1419; --panel: #161c23; --raised: #1d252e; --hover: #222b36; --line: #28313c; --line-strong: #3a4552;
+  --text: #dde3ea; --muted: #8c99a8; --faint: #5f6c7b;
+  --accent: #7cc4d6; --accent-ink: #072a33; --accent-soft: rgba(124, 196, 214, .14);
+  --amber: #e2a94b; --green: #62be8e; --rose: #e27c8b; --violet: #a89cf0; --blue: #6fa4f0;
+  --amber-soft: rgba(226, 169, 75, .15); --green-soft: rgba(98, 190, 142, .15); --rose-soft: rgba(226, 124, 139, .15);
+  --diff-add: rgba(98, 190, 142, .16); --diff-del: rgba(226, 124, 139, .16);
+  --shadow: 0 10px 40px rgba(0, 0, 0, .45); --scrim: rgba(5, 8, 12, .62);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #eef1f4; --panel: #f7f8fa; --raised: #ffffff; --hover: #e7ebf0; --line: #d5dbe2; --line-strong: #b8c1cb;
+  --text: #1a2128; --muted: #5a6776; --faint: #8693a1;
+  --accent: #1b6b80; --accent-ink: #ffffff; --accent-soft: rgba(27, 107, 128, .10);
+  --amber: #9a5f08; --green: #1c7a4e; --rose: #b0344a; --violet: #5846c2; --blue: #2b62c0;
+  --amber-soft: rgba(154, 95, 8, .11); --green-soft: rgba(28, 122, 78, .11); --rose-soft: rgba(176, 52, 74, .10);
+  --diff-add: rgba(28, 122, 78, .13); --diff-del: rgba(176, 52, 74, .12);
+  --shadow: 0 10px 34px rgba(26, 33, 40, .18); --scrim: rgba(26, 33, 40, .38);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg: #eef1f4; --panel: #f7f8fa; --raised: #ffffff; --hover: #e7ebf0; --line: #d5dbe2; --line-strong: #b8c1cb;
+    --text: #1a2128; --muted: #5a6776; --faint: #8693a1;
+    --accent: #1b6b80; --accent-ink: #ffffff; --accent-soft: rgba(27, 107, 128, .10);
+    --amber: #9a5f08; --green: #1c7a4e; --rose: #b0344a; --violet: #5846c2; --blue: #2b62c0;
+    --amber-soft: rgba(154, 95, 8, .11); --green-soft: rgba(28, 122, 78, .11); --rose-soft: rgba(176, 52, 74, .10);
+    --diff-add: rgba(28, 122, 78, .13); --diff-del: rgba(176, 52, 74, .12);
+    --shadow: 0 10px 34px rgba(26, 33, 40, .18); --scrim: rgba(26, 33, 40, .38);
+  }
+}

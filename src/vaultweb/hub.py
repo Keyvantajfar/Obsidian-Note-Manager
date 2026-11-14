@@ -12,7 +12,7 @@ import time
 from typing import Any
 
 # events where only the latest one matters within the coalescing window
-COALESCE = {"stage", "scan", "taxonomy", "rules", "settings", "watch", "job.progress", "job.state", "status"}
+COALESCE = {"stage", "scan", "taxonomy", "rules", "settings", "watch", "status"}
 WINDOW = 0.12
 
 
@@ -43,10 +43,9 @@ class EventHub:
     def _publish(self, event: str, payload: dict) -> None:
         key = event
         if event == "job":
-            key = "job.progress" if payload.get("kind") == "progress" else "job.state"
-            if key == "job.progress":
-                key = f"job.progress:{payload.get('id')}"
-        if event in COALESCE or key.startswith("job.progress"):
+            # progress/state of one job: only the latest matters; 'added', 'started', 'finished' ... each stay distinct
+            key = f"job.{payload.get('kind')}:{payload.get('id')}"
+        if event in COALESCE or event == "job":
             self._pending[key] = {"event": event, **payload}
             if self._timer is None and self.loop is not None:
                 self._timer = self.loop.call_later(WINDOW, self._flush)
