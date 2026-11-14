@@ -1,5 +1,5 @@
 name: Release
-# Push a tag such as v0.2.0 to publish: wheel + sdist and app binaries for Linux, Windows and macOS.
+# Push a tag such as v0.9.0 to publish: wheel + sdist and app binaries for Linux, Windows and macOS.
 on:
   push:
     tags: ["v*"]

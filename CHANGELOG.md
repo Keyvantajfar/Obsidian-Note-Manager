@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.0]
+## [0.9.0]
 ### Added
 - Desktop app: a local web UI (`vaultweb`: FastAPI + plain HTML/CSS/JS, no frontend framework) shown in an app-style
   window — pywebview if installed, else a Chromium `--app` window, else a browser tab. The app exits when its window closes.
