@@ -22,10 +22,10 @@
 
 /* ---- data table (virtualised) ---- */
 .dt { flex: 1; min-height: 0; overflow: auto; position: relative; outline: none; background: var(--bg); }
-.dt-head { position: sticky; top: 0; z-index: 3; display: grid; align-items: center; height: 30px; background: var(--panel); border-bottom: 1px solid var(--line); font-size: var(--fs-sm); color: var(--muted); font-weight: 600; min-width: max-content; width: 100%; }
+.dt-head { position: sticky; top: 0; z-index: 3; display: grid; align-items: center; height: 30px; background: var(--panel); border-bottom: 1px solid var(--line); font-size: var(--fs-sm); color: var(--muted); font-weight: 600; min-width: var(--dt-min, 100%); width: 100%; }
 .dt-head > div { padding: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: none; }
 .dt-head .sortable { cursor: pointer; } .dt-head .sortable:hover { color: var(--text); }
-.dt-body { position: relative; min-width: max-content; width: 100%; }
+.dt-body { position: relative; min-width: var(--dt-min, 100%); width: 100%; }
 .dt-row { position: absolute; left: 0; right: 0; display: grid; align-items: center; height: var(--row-h); border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); cursor: default; }
 .dt-row > div { padding: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .dt-row:hover { background: var(--hover); }
@@ -85,3 +85,30 @@
 .picker-list button { display: flex; align-items: center; gap: 9px; width: 100%; height: 32px; padding: 0 10px; border: 0; background: transparent; text-align: left; }
 .picker-list button:hover { background: var(--hover); } .picker-list button[aria-selected=true] { background: var(--accent-soft); }
 .picker-list .badge { margin-left: auto; }
+
+/* ---- inspector (right-hand detail panes) ---- */
+.inspector { min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+.ins-head { padding: 14px 14px 6px; display: grid; gap: 4px; }
+.ins-sec { padding: 10px 14px 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.ins-sec h3 { font-size: var(--fs-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+.ins-sec.row { display: flex; }
+.inspector .note-body { font-size: var(--fs-md); max-height: 34vh; overflow: auto; }
+.tn.all { width: calc(100% - 8px); margin: 6px 4px 0; border: 0; background: transparent; padding-left: 8px; text-align: left; }
+.tn.all:hover { background: var(--hover); } .tn.all.cur { background: var(--accent-soft); font-weight: 600; }
+
+/* ---- apply dialog ---- */
+.plan-item { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg); }
+.plan-item summary { display: flex; gap: 10px; align-items: center; padding: 7px 10px; cursor: pointer; }
+.plan-item.blocked { border-color: var(--rose); }
+.plan-item > .diff, .plan-item > .issues { margin: 0 10px 10px; }
+.issues { padding-left: 18px; font-size: var(--fs-sm); } .issues .error { color: var(--rose); } .issues .warn { color: var(--amber); }
+
+/* ---- jobs ---- */
+.job-list { display: grid; gap: 8px; padding: 12px; }
+.job { display: grid; gap: 7px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); text-align: left; }
+.job:hover { border-color: var(--line-strong); } .job.cur { border-color: var(--accent); background: var(--accent-soft); }
+.meterbar { height: 5px; border-radius: 3px; background: var(--line-strong); overflow: hidden; }
+.meterbar i { display: block; height: 100%; background: var(--accent); transition: width .25s var(--ease); }
+
+.dt-row .chips { flex-wrap: nowrap; overflow: hidden; } .dt-row .chip { flex: 0 1 auto; min-width: 0; }
+.dt-row .row { flex-wrap: nowrap; min-width: 0; }

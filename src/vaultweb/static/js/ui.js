@@ -161,13 +161,14 @@ export class DataTable {
     this.rows = []; this.view = []; this.sel = new Set(); this.cur = null; this.anchor = null; this.sortKey = null; this.sortDir = 1;
     const cols = [...(this.o.checkbox ? ['34px'] : []), ...this.o.columns.map((c) => (c.width || '1fr').replace(/^(\d*\.?\d*)fr$/, 'minmax(90px,$1fr)'))];
     this.tpl = cols.join(' ');
+    const minW = cols.reduce((a, c) => a + (parseInt((c.match(/minmax\((\d+)px/) || c.match(/^(\d+)px/) || [0, 90])[1], 10) || 90), 0);
     this.head = h('div', { class: 'dt-head', style: { gridTemplateColumns: this.tpl } },
       this.o.checkbox ? h('div', { class: 'cb' }, this.allBox = h('input', { type: 'checkbox', 'aria-label': 'Select all', onchange: () => (this.allBox.checked ? this.selectAll() : this.clearSel()) })) : null,
       this.o.columns.map((c) => h('div', { class: c.sort ? 'sortable' : '', title: c.title || c.label, onclick: c.sort ? () => this.sortBy(c.key) : null }, c.label)));
     this.body = h('div', { class: 'dt-body' });
     this.emptyEl = h('div', { class: 'dt-empty', hidden: true });
     this.el = h('div', { class: 'dt ' + (this.o.class || ''), tabindex: 0, role: 'grid', 'aria-label': this.o.label || 'Table' }, this.head, this.body, this.emptyEl);
-    this.el.style.setProperty('--row-h', this.o.rowHeight + 'px');
+    this.el.style.setProperty('--row-h', this.o.rowHeight + 'px'); this.el.style.setProperty('--dt-min', minW + 'px');
     this.render = throttleFrame(() => this._render());
     this.el.addEventListener('scroll', this.render, { passive: true });
     new ResizeObserver(this.render).observe(this.el);
