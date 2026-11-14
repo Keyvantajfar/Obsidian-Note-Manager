@@ -112,3 +112,17 @@
 
 .dt-row .chips { flex-wrap: nowrap; overflow: hidden; } .dt-row .chip { flex: 0 1 auto; min-width: 0; }
 .dt-row .row { flex-wrap: nowrap; min-width: 0; }
+
+/* ---- rules & settings pages ---- */
+.rules-view, .settings-view { max-width: 920px; margin: 0 auto; padding: 22px 24px 60px; display: grid; gap: 30px; }
+.rules-view section { display: grid; gap: 10px; } .rules-view h2, .settings-view h2 { font-size: var(--fs-xl); }
+.rule-list { display: grid; gap: 6px; margin-top: 4px; }
+.rule { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); }
+.rule.off { opacity: .55; } .rule.bad { border-color: var(--rose); }
+.rule code { font-family: var(--font-mono); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px 18px; }
+.form-grid .wide { grid-column: 1 / -1; }
+.help { color: var(--faint); font-size: var(--fs-xs); font-weight: 400; }
+.settings-view .panel { padding: 16px 18px; display: grid; gap: 14px; }
+.field-row { display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); }
+.ins-sec > .btn { justify-self: start; }

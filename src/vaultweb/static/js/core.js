@@ -60,7 +60,7 @@ const I = {
   filter: 'M4 5h16l-6 8v6l-4-2v-4z', more: 'M5 12h.01 M12 12h.01 M19 12h.01',
   help: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7 M12 17h.01',
   power: 'M12 3v9 M6.5 6.5a8 8 0 1 0 11 0', copy: 'M8 8h11v12H8z M5 16V4h11', eye: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
-  grid: 'M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z', move: 'M5 12h14 M13 6l6 6-6 6 M5 5v14',
+  up: 'M6 15l6-6 6 6', grid: 'M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z', move: 'M5 12h14 M13 6l6 6-6 6 M5 5v14',
 };
 export function icon(name, cls = '') {
   const NS = 'http://www.w3.org/2000/svg';
