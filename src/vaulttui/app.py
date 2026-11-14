@@ -155,7 +155,7 @@ class VaultApp(App):
             self.apply_workflow(self.workflow)
             self.show_home()
         self.session.on(self._on_event)
-        self.set_interval(0.3, self._flush)
+        self.set_interval(0.3, self._flush_view)
         try:
             self.theme = self.session.settings.theme
         except Exception:
@@ -194,7 +194,8 @@ class VaultApp(App):
     def _mark_all_stale(self) -> None:
         self._stale |= set(self._tabs)
 
-    def _flush(self) -> None:
+    def _flush_view(self) -> None:
+        # NB: not named _flush: Textual's App has a private _flush(stderr) that it calls when printing at shutdown
         if self._events:
             ev, self._events = self._events, set()
             for tid, w in self._tabs.items():
@@ -206,8 +207,11 @@ class VaultApp(App):
             return
         w = self._tabs.get(active)
         if w is not None and active in self._stale:
-            if w.maybe_refresh():
-                self._stale.discard(active)
+            try:
+                if w.maybe_refresh():
+                    self._stale.discard(active)
+            except Exception:           # tab not mounted yet / app shutting down
+                pass
         try:
             self.query_one("#statusbar", StatusBar).refresh_view(self.session, self._paused, self.workflow)
             if self.query_one("#homeview").display:
