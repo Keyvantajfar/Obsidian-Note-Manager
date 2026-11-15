@@ -107,6 +107,8 @@ def create_app(state: AppState | None = None, *, extra_hosts: set[str] | None = 
 
     @app.exception_handler(Exception)
     async def _any_error(request: Request, e: Exception):
+        from . import crashlog
+        crashlog.record(f"{request.method} {request.url.path} failed", e)
         return JSONResponse({"error": f"{type(e).__name__}: {e}"}, status_code=500)
 
     # ---- routes ---------------------------------------------------------------------

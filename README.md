@@ -16,7 +16,7 @@ It comes in three flavours that share one engine:
 |---|---|---|
 | **Desktop app (GUI)** | A window with every feature. No Python needed. | Download a binary from [Releases](../../releases) |
 | **Terminal UI (TUI)** | The same workspaces in your terminal | Install from source: `pip install -e ".[tui]"` |
-| **Command line (CLI)** | Headless: scripts, cron, quick checks | Included in the binary and in the source install |
+| **Command line (CLI)** | Headless: scripts, cron, quick checks | Linux/macOS binaries (`vaultmgr cli`), or any OS from source (`vaultmgr-cli`) |
 
 ## Quick start
 
@@ -56,7 +56,7 @@ vaultmgr-tui --demo
 
 ### Command line
 
-Available in the binary as `vaultmgr cli ...` and from source as `vaultmgr-cli ...`:
+On Linux and macOS the binary takes `vaultmgr cli ...`. The Windows `.exe` is a windowed app and cannot print into a terminal, so on Windows install from source and use `vaultmgr-cli ...`. The examples below use the `vaultmgr cli` form:
 
 ```
 vaultmgr cli /path/to/vault status

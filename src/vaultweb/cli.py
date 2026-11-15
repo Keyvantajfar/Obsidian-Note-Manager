@@ -70,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv and argv[0] in ("-V", "--version"):
         argv = ["version"]
+    if argv and argv[0] in ("--cli", "--tui", "--serve", "--gui"):      # people type these; accept them as the subcommands
+        argv[0] = argv[0][2:]
     cmd = argv.pop(0) if argv and argv[0] in COMMANDS else "gui"
     if cmd == "version":
         print(f"vaultmgr {__version__}")
@@ -101,7 +103,8 @@ def main(argv: list[str] | None = None) -> int:
     rc = _import_config(a.import_config)
     if rc:
         return rc
-    from . import launcher
+    from . import crashlog, launcher
+    crashlog.install()
     if cmd == "serve":
         return launcher.serve(host=a.host, port=a.port, vault=vault, demo=a.demo, mock=a.mock, workflow=a.workflow)
     code = launcher.run(port=a.port, mode=a.mode, vault=vault, demo=a.demo, mock=a.mock, workflow=a.workflow)

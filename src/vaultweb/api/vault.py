@@ -15,6 +15,7 @@ from vaultcore.workflows import TAB_LABELS, WORKFLOWS
 
 from .. import __version__
 from ..common import body, sess, vm
+from .. import crashlog
 from ..state import ApiError
 
 router = APIRouter()
@@ -58,7 +59,7 @@ async def app_info(request: Request):
         recent = []
     return {"version": __version__, "platform": sys.platform, "python": platform.python_version(),
             "workflows": WORKFLOWS, "tab_labels": TAB_LABELS, "auto_levels": AUTO_LEVELS, "recent": recent,
-            "home": str(Path.home()), "desktop": bool(v.desktop.get("enabled")), "status": status_json(v)}
+            "home": str(Path.home()), "log": str(crashlog.log_path()), "desktop": bool(v.desktop.get("enabled")), "status": status_json(v)}
 
 
 @router.get("/api/status")

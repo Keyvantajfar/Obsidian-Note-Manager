@@ -16,6 +16,10 @@ jobs:
         with: { python-version: "${{ matrix.python }}" }
       - run: pip install -e ".[dev]"
       - run: python -m pytest -q
+      - name: UI scripts parse
+        if: matrix.python == '3.12'
+        shell: bash
+        run: for f in $(find src/vaultweb/static -name '*.js'); do node --input-type=module --check < "$f" || exit 1; done
   build-binary:
     # build + smoke-test the packaged app on every OS (the release workflow does the same and publishes)
     needs: test

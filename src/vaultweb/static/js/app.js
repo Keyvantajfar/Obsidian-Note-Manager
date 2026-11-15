@@ -208,7 +208,7 @@ function openHelp() {
     h('h3', null, 'Shortcuts'), h('dl', { class: 'kv' }, sc.flatMap(([k, v]) => [h('dt', null, h('kbd', null, k)), h('dd', null, v)])),
     h('h3', null, 'Command line'), h('p', { class: 'muted' }, 'Plain text becomes a standing instruction for the AI. Prefix with @folder: or #tag: to scope it. Rules use  condition -> action  (see the Rules tab).'),
     h('dl', { class: 'kv' }, cmds.flatMap(([k, v]) => [h('dt', null, h('code', null, k)), h('dd', null, v)])),
-    h('p', { class: 'faint' }, `Vault Manager ${S.app.version}`)), actions: [{ label: 'Close', kind: 'primary', value: null }] });
+    h('p', { class: 'faint' }, `Vault Manager ${S.app.version} · log file: ${S.app.log}`)), actions: [{ label: 'Close', kind: 'primary', value: null }] });
 }
 async function quit() {
   const ok = await confirmDialog({ title: 'Quit Vault Manager?', message: 'Staged changes are kept and will be here next time. Running AI jobs stop.', confirmLabel: 'Quit', danger: true });
